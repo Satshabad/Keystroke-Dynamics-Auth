@@ -48,7 +48,7 @@ $(window).load(function(){
         var uname = $('#uname').attr('value');
         console.log(uname);
         $.ajax({
-            'url' : '/trainData',
+            'url' : '/getConfidence',
             'type' : 'POST',
             'data' : JSON.stringify({
                 'userID' : uname,
