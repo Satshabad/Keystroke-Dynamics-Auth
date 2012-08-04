@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<!-- saved from url=(0033)http://jsfiddle.net/Vwf8c/8/show/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <title> - jsFiddle demo</title>
+  
+  <script type="text/javascript" src="jquery.min.js"></script>
+  
+<script type="text/javascript">//<![CDATA[ 
+$(window).load(function(){
+var flightDwell = [];
+var prevKeyup = undefined;
+var keydown = undefined;
+var dwellTime = undefined;
+var flightTime = undefined;
+
+$('#target').keyup(function(event) {
+  if (event.keyCode == '13') {
+     event.preventDefault();
+  }
+  var currentTime = event.timeStamp;
+  var dwellTime = currentTime - keydown;
+  prevKeyup = currentTime;
+  var fl = {
+      keyCode : event.keyCode,
+      dwellTime : dwellTime,
+      flightTime: flightTime
+  };
+  flightDwell.push(fl);
+});
+
+$('#target').keydown(function(event) {
+  if (event.keyCode == '13') {
+     event.preventDefault();
+   }
+    if (prevKeyup != undefined) {
+        var currentTime = event.timeStamp;
+        flightTime = currentTime - prevKeyup; 
+    } else {
+        flightTime = -1;
+    }
+    keydown = event.timeStamp;
+});
+
+$('#other').click(function() {
+    $.ajax({
+      contentType: "application/json",
+      url: "/getConfidence",
+      type: 'POST',
+      data: {"flightDwell": flightDwell }
+    }).done(function() { 
+      console.log('success');
+    });
+});
+});//]]>  
+
+</script>
+
+
+</head>
+<body>
+  <form>
+    <label for="target">Type Something:</label>
+    <input id="target" type="text">
+</form>
+<button id="other">
+  Trigger the handler
+</button>
+<script type="text/javascript" src="events.js"></script>
+</body></html>
