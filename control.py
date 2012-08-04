@@ -34,8 +34,11 @@ def getConfidence():
             data.append((last_chr + chr(event['keyCode']), event['flightTime']))
             last_chr = chr(event['keyCode'])
     userstore.createUser(keyStrokeData['userID'], data)
+    print data
     au = auth.Authenticator('zjlszsy', 25)
-    return au.getLikelihooFromProfile(keyStrokeData['userID'])
+    au.initConstWithFullValidation()
+    print keyStrokeData['userID']
+    return au.getLikelihoodFromProfile(keyStrokeData['userID'])
 
 @route('/<filename>')
 def server_static(filename):
