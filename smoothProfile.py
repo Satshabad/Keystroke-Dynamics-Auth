@@ -7,7 +7,7 @@ Author: Shiyu
 import pickle
 from userstore import User
 
-MAX_TIME = 300
+MAX_TIME = 200
 MIN_EVENTS = 3
 UPPER_LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
