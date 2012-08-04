@@ -8,7 +8,7 @@ except:
     pickle.dump({}, open('userdata.pkl', 'w'))
 
 
-def createUser(eventlist, userID):
+def createUser(userID, eventlist):
     user_data = defaultdict(list)
     for event in eventlist:
         user_data[event[0]].append(event[1])

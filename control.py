@@ -1,10 +1,12 @@
 import bottle
 from bottle import route, run, request, static_file
 
+import userstore
+
 @route('/getConfidence', method='POST')
 def getConfidence():
     keyStrokeData = request.json
-    print keyStrokeData
+    userstore.createUser(keyStrokeData['userID'], keyStrokeData['data'])
 
 @route('/generate', method='GET')
 def servePage():
