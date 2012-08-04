@@ -44,9 +44,10 @@ $('#target').keydown(function(event) {
 
 $('#other').click(function() {
     $.ajax({
+      contentType: "application/json",
       url: "/getConfidence",
       type: 'POST',
-      data: flightDwell
+      data: {"flightDwell": flightDwell }
     }).done(function() { 
       console.log('success');
     });
@@ -65,5 +66,5 @@ $('#other').click(function() {
 <button id="other">
   Trigger the handler
 </button>
-<script type="text/javascript" src="./test1_files/events.js"></script>
+<script type="text/javascript" src="events.js"></script>
 </body></html>
