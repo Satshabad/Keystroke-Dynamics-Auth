@@ -47,7 +47,8 @@ $('#other').click(function() {
       contentType: "application/json",
       url: "/getConfidence",
       type: 'POST',
-      data: {"flightDwell": flightDwell }
+      data: JSON.stringify({"flightDwell": flightDwell }),
+      dataType: "json", 
     }).done(function() { 
       console.log('success');
     });
