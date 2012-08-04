@@ -5,9 +5,14 @@ from collections import defaultdict
 
 
 def createUser(userID, eventlist):
-    user_data = defaultdict(list)
+    try:
+        user_data = pickle.load(open(userID+'.data', 'r'))
+    except:
+        user_data = defaultdict(list)
+        print 'this should not appear'
     for event in eventlist:
         user_data[event[0]].append(event[1])
+        print event[0]
     pickle.dump(user_data, open(userID+'.data', 'w'))
 
 class User:
