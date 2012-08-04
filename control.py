@@ -25,4 +25,4 @@ def servePage():
 def server_static(filename):
     return static_file(filename, root='./')
 
-run()
+run(host='localhost', port=80)
