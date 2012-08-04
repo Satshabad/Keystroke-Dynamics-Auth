@@ -21,7 +21,19 @@ class User:
 
     def get(self, event, lower_bound, upper_bound):
         num_of_occurs = 0
+        if event not in self.user_data.keys():
+            raise ValueError("No such events!")
         for time in self.user_data[event]:
             if time < upper_bound and time > lower_bound:
                 num_of_occurs += 1
         return num_of_occurs/float(len(self.user_data[event]))
+        
+    def getNumEvents(self, event):
+        return len(self.user_data[event])
+        
+    def getFullVaidationSet(self):
+        lst = []
+        for event in self.user_data:
+            for time in self.user_data[event]:
+                lst.append((event, time))
+        return lst

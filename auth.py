@@ -4,16 +4,17 @@ The class contains a number of method to authenticate specific users.
 Author: Shiyu
 '''
 
+from smoothProfile import *
+from userstore import *
+
 VERBOSE = True
 
 class Authenticator:
 
-    def Authenticator(self, profile, interval):
+    def __init__(self, name, interval):
         '''Constructs the class'''
-        self.name = profile.getName()
-        self.roughProfile = profile
-        self.interval = interval
-        self.profile = profile.getSmoothProfile(self.interval)
+        self.name = name
+        self.profile = SmoothProfile(name, interval)
         
     def initNormalizingConst(self, validationSet):
         '''
@@ -23,7 +24,7 @@ class Authenticator:
         ''' 
         sample = []
         for (event, time) in validationSet:
-            if self.profile.hasProbDist(event):
+            if (self.profile.exists(event)) and (time < MAX_TIME):
                 sample.append(self.profile.getProb(event, time))
         const = 1.0
         magnitude = 0.0 # we have magnitude so that the float doesn't overflow
@@ -34,6 +35,11 @@ class Authenticator:
                 const = const / 100
         size = len(sample)
         self.const = const ** (1.0/size) * 10 ** (magnitude/size)
+        return self.const
+        
+    def initConstWithFullValidation(self):
+        self.validationSet = User(self.name).getFullVaidationSet()
+        self.initNormalizingConst(self.validationSet)
         
     def getLikelihood(self, testSet):
         '''
@@ -41,8 +47,17 @@ class Authenticator:
         '''
         prob = 1.0
         for (event, time) in testSet:
-            if self.profile.hasProbDist(event):
+            if (self.profile.exists(event)) and (time < MAX_TIME):
                 prob *= self.const * self.profile.getProb(event, time)
-                if VERBOSE:
-                    print "Event=", event, "; Time=", time, "; Prob=", prob
         return prob
+        
+    def getLikelihoodFromProfile(self, name):
+        other = User(name)
+        return self.getLikelihood(other.getFullVaidationSet())
+        
+        
+if __name__ == '__main__':
+    auth = Authenticator('zjlszsy', 20)
+    auth.initConstWithFullValidation()
+    print auth.getLikelihoodFromProfile('zjlszsy')
+    #print auth.initNormalizingConst()
