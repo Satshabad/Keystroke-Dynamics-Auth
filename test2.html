@@ -46,33 +46,48 @@ $(window).load(function(){
     
     $('#other').click(function() {
         var uname = $('#uname').attr('value');
+        var uname_actual = $('#uname_actual').attr('value');
         console.log(uname);
         $.ajax({
             'url' : '/getConfidence',
             'type' : 'POST',
             'data' : JSON.stringify({
                 'userID' : uname,
+                'actual_userID': uname_actual,
                 'data' : flightDwell
             }),
             'contentType': 'application/json',
             'success' : function(data){
-                console.log(data);
+                $('#confidence').text(data);
             }
         });
     });
 });
 </script>
 
-
+<h1 align='center'>Keystroke Dynamics</h1>
 </head>
 <body>
-  <form>
-    <label for="target">Type Something:</label>
-    <input id="uname" type="text">
-    <textarea id="target" type="text"></textarea>
-</form>
-<button id="other">
-  Trigger the handler
-</button>
+    <table align='center'>
+        <tr><td>
+            <label for="target">Type Something:</label></td>
+        </tr>
+        <tr><td>
+            <input id="uname" type="text">
+            <input id="uname_actual" type="text">
+        </tr>
+        <tr><td>
+            <textarea id="target" type="text" rows='20' cols='50'></textarea></td>
+        </tr>
+        <tr><td>
+            <button id="other">
+              Get confidence
+            </button></td>
+        </tr>
+        <tr><td>
+            <span id='confidence'></span></td>
+        </tr>
+    </table>
+
 <script type="text/javascript" src="events.js"></script>
 </body></html>
