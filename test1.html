@@ -43,7 +43,13 @@ $('#target').keydown(function(event) {
 });
 
 $('#other').click(function() {
-  console.log(flightDwell);
+    $.ajax({
+      url: "/getConfidence",
+      type: 'POST',
+      data: flightDwell
+    }).done(function() { 
+      console.log('success');
+    });
 });
 });//]]>  
 
