@@ -20,7 +20,7 @@ def getConfidence():
 
 @route('/generate', method='GET')
 def servePage():
-    return(open('test1.html').read())
+    return(open('test2.html').read())
 
 @route('/getConfidence', method='POST')
 def getConfidence():
@@ -33,8 +33,9 @@ def getConfidence():
         else:
             data.append((last_chr + chr(event['keyCode']), event['flightTime']))
             last_chr = chr(event['keyCode'])
-
-    return auth.getLikelihood(data)
+    userstore.createUser(keyStrokeData['userID'], data)
+    au = auth.Authenticator('zjlszsy', 25)
+    return au.getLikelihooFromProfile(keyStrokeData['userID'])
 
 @route('/<filename>')
 def server_static(filename):

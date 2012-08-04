@@ -8,6 +8,7 @@ from smoothProfile import *
 from userstore import *
 
 VERBOSE = True
+COMPENSATION = 1
 
 class Authenticator:
 
@@ -38,7 +39,7 @@ class Authenticator:
         return self.const
         
     def initConstWithFullValidation(self):
-        self.validationSet = User(self.name).getFullVaidationSet()
+        self.validationSet = User(self.name).getFullValidationSet()
         self.initNormalizingConst(self.validationSet)
         
     def getLikelihood(self, testSet):
@@ -48,16 +49,33 @@ class Authenticator:
         prob = 1.0
         for (event, time) in testSet:
             if (self.profile.exists(event)) and (time < MAX_TIME):
-                prob *= self.const * self.profile.getProb(event, time)
+                prob *= COMPENSATION * self.const * self.profile.getProb(event, time)
         return prob
         
     def getLikelihoodFromProfile(self, name):
         other = User(name)
-        return self.getLikelihood(other.getFullVaidationSet())
+        return self.getLikelihood(other.getValidationSample(50))
         
         
 if __name__ == '__main__':
-    auth = Authenticator('zjlszsy', 20)
+    auth = Authenticator('zjlszsy', 25)
     auth.initConstWithFullValidation()
     print auth.getLikelihoodFromProfile('zjlszsy')
+    print auth.getLikelihoodFromProfile('shiyu')
+    print auth.getLikelihoodFromProfile('shiyu2')
+    print auth.getLikelihoodFromProfile('standard')
+    #print auth.getLikelihoodFromProfile('yes1')
+    #print auth.getLikelihoodFromProfile('yes2')
+    print '----------------------------'
+    print auth.getLikelihoodFromProfile('chandra')
+    print auth.getLikelihoodFromProfile('satshabad2')
+    #print auth.getLikelihoodFromProfile('test_positive')
+    #print auth.getLikelihoodFromProfile('allen')
+    #print auth.getLikelihoodFromProfile('allen_copy')
+    print auth.getLikelihoodFromProfile('channie1')
+    print auth.getLikelihoodFromProfile('channie2')
+    print auth.getLikelihoodFromProfile('channie3')
+
+
+
     #print auth.initNormalizingConst()

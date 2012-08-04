@@ -1,5 +1,6 @@
 import pickle
 import collections
+import random
 from collections import defaultdict
 
 
@@ -31,9 +32,16 @@ class User:
     def getNumEvents(self, event):
         return len(self.user_data[event])
         
-    def getFullVaidationSet(self):
+    def getFullValidationSet(self):
         lst = []
         for event in self.user_data:
             for time in self.user_data[event]:
                 lst.append((event, time))
         return lst
+
+    def getValidationSample(self, num):
+        lst = self.getFullValidationSet()
+        sample = []
+        for i in range(num):
+            sample.append(random.choice(lst))
+        return sample

@@ -53,7 +53,7 @@ class SmoothProfile:
             if i == j:
                 score += prob[j] * 10.0
             else:
-                score += prob[j] / (abs(i-j))
+                score += prob[j] / abs(i-j)
         return score
                 
     def _normalize(self, score):
