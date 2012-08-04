@@ -11,8 +11,9 @@ class Authenticator:
     def Authenticator(self, profile, interval):
         '''Constructs the class'''
         self.name = profile.getName()
-        self.user = profile
+        self.roughProfile = profile
         self.interval = interval
+        self.profile = profile.getSmoothProfile(self.interval)
         
     def initNormalizingConst(self, validationSet):
         '''
@@ -23,7 +24,7 @@ class Authenticator:
         sample = []
         for (event, time) in validationSet:
             if self.profile.hasProbDist(event):
-                sample.append(self.profile.getProb(event, time, self.interval))
+                sample.append(self.profile.getProb(event, time))
         const = 1.0
         magnitude = 0.0 # we have magnitude so that the float doesn't overflow
         for prob in sample:
@@ -41,7 +42,7 @@ class Authenticator:
         prob = 1.0
         for (event, time) in testSet:
             if self.profile.hasProbDist(event):
-                prob *= self.const * self.profile.getProb(event, time, self.interval)
+                prob *= self.const * self.profile.getProb(event, time)
                 if VERBOSE:
                     print "Event=", event, "; Time=", time, "; Prob=", prob
         return prob
