@@ -6,55 +6,61 @@
   
   <script type="text/javascript" src="jquery.min.js"></script>
   
-<script type="text/javascript">//<![CDATA[ 
+<script type="text/javascript">
 $(window).load(function(){
-var flightDwell = [];
-var prevKeyup = undefined;
-var keydown = undefined;
-var dwellTime = undefined;
-var flightTime = undefined;
+    var flightDwell = [];
+    var prevKeyup = undefined;
+    var keydown = undefined;
+    var dwellTime = undefined;
+    var flightTime = undefined;
 
-$('#target').keyup(function(event) {
-  if (event.keyCode == '13') {
-     event.preventDefault();
-  }
-  var currentTime = event.timeStamp;
-  var dwellTime = currentTime - keydown;
-  prevKeyup = currentTime;
-  var fl = {
-      keyCode : event.keyCode,
-      dwellTime : dwellTime,
-      flightTime: flightTime
-  };
-  flightDwell.push(fl);
-});
+    $('#target').keyup(function(event) {
+      if (event.keyCode == '13') {
+         event.preventDefault();
+      }
+      var currentTime = event.timeStamp;
+      var dwellTime = currentTime - keydown;
+      prevKeyup = currentTime;
+      var fl = {
+          keyCode : event.keyCode,
+          dwellTime : dwellTime,
+          flightTime: flightTime
+      };
+      flightDwell.push(fl);
+    });
 
-$('#target').keydown(function(event) {
-  if (event.keyCode == '13') {
-     event.preventDefault();
-   }
-    if (prevKeyup != undefined) {
-        var currentTime = event.timeStamp;
-        flightTime = currentTime - prevKeyup; 
-    } else {
-        flightTime = -1;
-    }
-    keydown = event.timeStamp;
-});
+    $('#target').keydown(function(event) {
+      if (event.keyCode == '13') {
+         event.preventDefault();
+       }
+        if (prevKeyup != undefined) {
+            var currentTime = event.timeStamp;
+            flightTime = currentTime - prevKeyup; 
+        } else {
+            flightTime = -1;
+        }
+        keydown = event.timeStamp;
+    });
 
-$('#other').click(function() {
-    $.ajax({
-      contentType: "application/json",
-      url: "/getConfidence",
-      type: 'POST',
-      data: JSON.stringify({"flightDwell": flightDwell }),
-      dataType: "json", 
-    }).done(function() { 
-      console.log('success');
+    var text = { data : 'data'}
+    
+    $('#other').click(function() {
+        var uname = $('#uname').attr('value');
+        console.log(uname);
+        $.ajax({
+            'url' : '/getConfidence',
+            'type' : 'POST',
+            'data' : JSON.stringify({
+                'userId' : uname,
+                'data' : flightDwell
+            }),
+            'contentType': 'application/json',
+            'success' : function(data){
+                console.log(data);
+            }
+        });
     });
 });
-});//]]>  
-
 </script>
 
 
@@ -62,6 +68,7 @@ $('#other').click(function() {
 <body>
   <form>
     <label for="target">Type Something:</label>
+    <input id="uname" type="text">
     <input id="target" type="text">
 </form>
 <button id="other">
